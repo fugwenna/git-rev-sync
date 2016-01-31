@@ -1,6 +1,8 @@
 'use strict';
 
 var fs = require('graceful-fs');
+var os = require('os');
+var ws = require('windows-shortcuts');
 var path = require('path');
 var childProcess = require('child_process');
 var shell = require('shelljs');
@@ -55,6 +57,30 @@ function _getGitDirectory(start) {
   start.pop();
 
   return _getGitDirectory(start);
+}
+
+function _getAbsPath(dir, callback) {
+  // windows shortcuts
+  if (os.platform() == 'win32' && path.extname(dir) == '.lnk') {
+    // force this sync?
+    ws.query(dir, function(err, data) {
+      if (err) {
+        throw new Error(err);
+      }
+
+      callback(data.target);
+    });
+  }
+  // linux/osx symlinks
+  else {
+    fs.realpath(dir, function(err, realPath) {
+      if (err) {
+        throw new Error(err);
+      }
+
+      callback(realPath);
+    });
+  }
 }
 
 function branch(dir) {

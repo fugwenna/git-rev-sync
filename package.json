@@ -45,7 +45,8 @@
   },
   "dependencies": {
     "graceful-fs": "4.1.2",
-    "shelljs": "0.5.3"
+    "shelljs": "0.5.3",
+    "windows-shortcuts": "^0.1.1"
   },
   "devDependencies": {}
 }
